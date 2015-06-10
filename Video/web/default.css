@@ -1,0 +1,113 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : May 17, 2015, 4:11:04 PM
+    Author     : Galimberti
+*/
+
+.administrator-menu
+{
+    background: none;
+    margin-left: 100px;
+    border: none;
+}
+
+.north-menu-pane
+{
+    /*background: linear-gradient(to bottom, rgb(2,77,117) 0%, white 50%, rgb(2,77,117) 100%);*/
+    background: linear-gradient(to bottom, rgb(0,70,110) 0%, rgb(0,100,150) 40%, rgb(0,100,150) 60%, rgb(0,70,110) 100%);
+}
+
+.north-menu-pane .z-separator
+{
+    background-color: rgb(0,50,90);
+    width: 2px;
+    height: 30px;
+    vertical-align: bottom;
+}
+
+.center-application
+{
+    /*background-color: rgb(229,231,242);*/
+}
+
+.application-button, .application-button-selected
+{
+    text-align: center;
+}
+
+.application-button .z-toolbarbutton-content
+{
+    color: rgb(229,231,242);
+    text-shadow: none;
+    font-size: 8pt;
+    font-weight: normal;
+}
+
+.application-button-selected .z-toolbarbutton-content
+{
+    color: white;
+    text-shadow: none;
+    font-size: 10pt;
+    font-weight: bold;
+}
+
+.default-application, .actions-pane
+{
+    background-color: white;
+}
+
+.default-application
+{
+    padding: 20px;
+}
+
+.inner-application-center, .inner-application-east
+{
+    background: linear-gradient(to bottom, rgb(240,240,250) 0%, rgb(229,231,242) 100%);
+    /*background-color: rgb(229,231,242);*/
+    border: none;
+}
+
+.inner-application-center
+{
+    padding-left: 30px;
+    padding-top: 30px;
+    padding-right: 30px;
+    padding-bottom: 30px;
+}
+
+.inner-application-east
+{
+    padding-top: 30px;
+    padding-right: 40px;
+    padding-bottom: 30px;
+}
+
+.inner-application-borderlayout
+{
+    background-color: rgb(229,231,242);
+    border: none;
+}
+
+.actions-pane
+{
+    padding: 10px;
+}
+
+.action-button span
+{
+    font-weight: bold;
+    color: rgb(0,88,132);
+    font-size: 16pt;
+    font-family: monospace;
+}
+
+.default-editor
+{
+    padding: 20px;
+    border: 4px solid rgb(229,231,242);
+}
