@@ -5,20 +5,28 @@
  */
 package com.video.editors;
 
+import com.video.controllers.ImdbController;
 import com.video.data.Category;
+import com.video.data.ImdbData;
 import com.video.data.Title;
 import com.video.db.CategoryManager;
 import com.video.parts.Table;
 import com.video.util.EditorCompletionCallback;
+import java.io.IOException;
+import java.net.URL;
 import java.sql.Date;
 import java.util.List;
 import org.zkoss.image.AImage;
+import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Datebox;
+import org.zkoss.zul.Div;
 import org.zkoss.zul.Hbox;
+import org.zkoss.zul.Image;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.SimpleListModel;
@@ -66,7 +74,7 @@ public class TitleEditor
     @Override
     public boolean validateInput()
     {
-        if ( textbox.getText() == null || textbox.getText().isEmpty() )
+        if ( titleTextbox.getText() == null || titleTextbox.getText().isEmpty() )
         {
             Messagebox.show( "É preciso informar o título!" );
             
@@ -101,7 +109,7 @@ public class TitleEditor
         
             if ( source.getId() > 0 )
             {
-                textbox.setText( source.getName() );
+                titleTextbox.setText( source.getName() );
                 combobox.setSelectedIndex( categories.indexOf( CategoryManager.getInstance().getCategory( source.getCategory() ) ) );
                 datebox.setValue( source.getDtReleased() );
             }
@@ -116,9 +124,39 @@ public class TitleEditor
     @Override
     public void getSource( Title source )
     {
-        source.setName( textbox.getValue() );
+        source.setName( titleTextbox.getValue() );
         source.setCategory( ((Category)combobox.getModel().getElementAt( combobox.getSelectedIndex() ) ).getId() );
         source.setDtReleased( new Date( datebox.getValue().getTime() ) );
+    }
+    
+    private void chageOriginalTitle()
+    {
+        try
+        {
+            image.getChildren().clear();
+            
+            if ( !originalTitletextbox.getText().isEmpty() )
+            {
+                ImdbData data = ImdbController.getImdbData( originalTitletextbox.getText() );
+
+                Object poster  = data != null ? data.getPoster() : null;
+
+                
+                if ( poster != null )
+                {
+                    
+                    Image img = new Image( poster.toString() );
+                    img.setHeight( "100px" );
+                    img.setWidth( "100px" );
+                    
+                    image.appendChild( img );
+                }
+            }
+        }
+        catch ( WrongValueException e )
+        {
+            e.printStackTrace( System.err );
+        }
     }
     
     private void initComponents()
@@ -128,14 +166,12 @@ public class TitleEditor
         
         button.setLabel( "Novo" );
         
-        imgButton.setUpload( "true" );
-        
-        imgButton.setWidth( "96px" );
-        imgButton.setHeight( "96px" );
+        image.setWidth( "96px" );
+        image.setHeight( "96px" );
         
         combobox.setMold( "select" );
         
-        textbox.setHflex( "true" );
+        titleTextbox.setHflex( "true" );
         combobox.setHflex( "true" );
         
         Hbox hbox = new Hbox();
@@ -143,14 +179,15 @@ public class TitleEditor
         hbox.setHflex( "true" );
         hbox.setSpacing( "10px" );
         
-        hbox.appendChild( imgButton );
+        hbox.appendChild( image );
         hbox.appendChild( table );
         
         table.setWidths( "80px", "", "70px" );
         
         table.setDynamicProperty( "width", "450px" );
         
-        table.createRow( "Título:", textbox );
+        table.createRow( "Título:", titleTextbox );
+        table.createRow( "Título original:", originalTitletextbox );
         table.createRow( "Gênero:", combobox, button );
         table.createRow( "Lançamento:", datebox );
         
@@ -168,22 +205,24 @@ public class TitleEditor
             }
         } );
         
-        imgButton.addEventListener( org.zkoss.zk.ui.event.Events.ON_UPLOAD, new EventListener<UploadEvent>()
+        originalTitletextbox.addEventListener( Events.ON_BLUR, new EventListener<Event>() 
         {
             @Override
-            public void onEvent( UploadEvent t ) throws Exception
+            public void onEvent( Event event ) throws Exception 
             {
-                imgButton.setImageContent( new AImage( "imagem", t.getMedia().getByteData() ) );
+                chageOriginalTitle();
             }
-        } );
+        });
     }
     
     private Table table = new Table();
     
     private Button button = new Button();
-    private Button imgButton = new Button();
+    private Div image = new Div();
     
-    private Textbox textbox = new Textbox();
+    
+    private Textbox titleTextbox = new Textbox();
+    private Textbox originalTitletextbox = new Textbox();
     private Listbox combobox = new Listbox();
     private Datebox datebox = new Datebox();
 }
