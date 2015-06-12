@@ -37,6 +37,9 @@ public class LoginController extends SelectorComposer<Component>
             try
             {
                 User u = UserManager.getInstance().getUserByLogin( userName.getValue() );
+//                User u = new User();
+//                u.setName("Admin");
+//                u.setType(User.TYPE_ADMIN);
                 
                 Sessions.getCurrent( true ).setAttribute( "activeLogin", u );
                 Executions.sendRedirect( "apps/AdministratorApplication.jsp" );

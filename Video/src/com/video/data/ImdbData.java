@@ -25,4 +25,9 @@ public class ImdbData
     {
         info.put( name, value );
     }
+
+    public Map<Object, Object> getMapInfo()
+    {
+        return info;
+    }
 }
