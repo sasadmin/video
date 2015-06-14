@@ -67,8 +67,7 @@ and open the template in the editor.
 
 .inner-application-center, .inner-application-east
 {
-    background: linear-gradient(to bottom, rgb(240,240,250) 0%, rgb(229,231,242) 100%);
-    /*background-color: rgb(229,231,242);*/
+    background: linear-gradient(to bottom, rgb(230,230,230) 0%, rgb(250,250,250) 50%, rgb(230,230,230) 100%);
     border: none;
 }
 
@@ -90,6 +89,7 @@ and open the template in the editor.
 .inner-application-borderlayout
 {
     background-color: rgb(229,231,242);
+    /*background-color: gray;*/
     border: none;
 }
 
@@ -110,4 +110,10 @@ and open the template in the editor.
 {
     padding: 20px;
     border: 4px solid rgb(229,231,242);
+}
+
+a
+{
+    border: none !important;
+    background: none !important;
 }

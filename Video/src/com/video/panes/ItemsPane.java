@@ -88,40 +88,6 @@ public class ItemsPane
             }
         };
         
-        ApplicationAction editAction = new ApplicationAction( "/img/default_action.png", "Editar", "Editar Item" )
-        {
-            @Override
-            public void onEvent( Event t ) throws Exception
-            {
-                if ( getSelectedItem() != null )
-                {
-                    EditorWindow.openEditor( ItemsPane.this, new ItemEditor(), new EditorCompletionCallback<Item>( getSelectedItem() )
-                    {
-                        @Override
-                        public void performOk()
-                        {
-                            try
-                            {
-                                ItemManager.getInstance().updateItem( getSource() );
-
-                                refreshContent();
-                            }
-
-                            catch ( Exception e )
-                            {
-                                e.printStackTrace();
-                            }
-                        }
-
-                        @Override
-                        public void performCancel()
-                        {
-                        }
-                    });
-                }
-            }
-        };
-        
         ApplicationAction deleteAction = new ApplicationAction( "/img/default_action.png", "Excluir", "Excluir Item" )
         {
             @Override
@@ -154,7 +120,6 @@ public class ItemsPane
         
         actions.add( filterAction );
         actions.add( addAction );
-        actions.add( editAction );
         actions.add( deleteAction );
         
         return actions;

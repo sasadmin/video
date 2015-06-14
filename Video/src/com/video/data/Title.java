@@ -15,6 +15,7 @@ public class Title
 {
     private int id;
     private String name;
+    private String original_title;
     private Date dtReleased;
     private int category;
 
@@ -92,5 +93,21 @@ public class Title
     public boolean equals( Object obj )
     {
         return ((Title)obj).getId() == id;
+    }
+
+    /**
+     * @return the original_title
+     */
+    public String getOriginal_title()
+    {
+        return original_title;
+    }
+
+    /**
+     * @param original_title the original_title to set
+     */
+    public void setOriginal_title( String original_title )
+    {
+        this.original_title = original_title;
     }
 }

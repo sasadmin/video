@@ -39,12 +39,14 @@ public class TitleManager
         String sql = "insert into video_titles " +
                      "( " +
                         "name," +
+                        "original_title," +
                         "dt_released," +
                         "ref_category" +
                      ") " +
                      "values " +
                      "( " +
                         db.quote( title.getName() ) + "," +
+                        db.quote( title.getOriginal_title() ) + "," +
                         db.quote( title.getDtReleased() ) + "," +
                         title.getCategory() +
                      ") ";
@@ -58,6 +60,7 @@ public class TitleManager
         
         String sql = "update video_titles set " +
                      "name = " + db.quote( title.getName() ) + "," +
+                     "original_title = " + db.quote( title.getOriginal_title() ) + "," +
                      "dt_released = " + db.quote( title.getDtReleased() ) + "," +
                      "ref_category = " + title.getCategory() +
                      " where id = " + title.getId();
@@ -71,7 +74,7 @@ public class TitleManager
         
         Database db = Database.getInstance();
         
-        String sql = "select id, name, dt_released, ref_category " +
+        String sql = "select id, name, original_title, dt_released, ref_category " +
                      " from video_titles";
         
         ResultSet rs = db.executeQuery( sql );
@@ -82,6 +85,7 @@ public class TitleManager
             
             t.setId( rs.getInt( "id" ) );
             t.setName( rs.getString( "name" ) );
+            t.setOriginal_title( rs.getString( "original_title" ) );
             t.setDtReleased( rs.getDate( "dt_released" ) );
             t.setCategory( rs.getInt( "ref_category" ) );
             
@@ -95,7 +99,7 @@ public class TitleManager
     {
         Database db = Database.getInstance();
         
-        String sql = "select id, name, dt_released, ref_category " +
+        String sql = "select id, name, original_title, dt_released, ref_category " +
                      " from video_titles " +
                      " where " + 
                      " id = " + id;
@@ -108,6 +112,7 @@ public class TitleManager
             
             t.setId( rs.getInt( "id" ) );
             t.setName( rs.getString( "name" ) );
+            t.setOriginal_title( rs.getString( "original_title" ) );
             t.setDtReleased( rs.getDate( "dt_released" ) );
             t.setCategory( rs.getInt( "ref_category" ) );
             

@@ -5,9 +5,14 @@
  */
 package com.video.editors;
 
+import com.video.controllers.ConfigurationManager;
+import com.video.data.Item;
 import com.video.data.Renting;
 import com.video.data.RentingItem;
+import com.video.data.Title;
 import com.video.data.User;
+import com.video.db.ItemManager;
+import com.video.db.TitleManager;
 import com.video.db.UserManager;
 import com.video.parts.RentingItemsTable;
 import com.video.parts.Table;
@@ -16,6 +21,7 @@ import com.video.util.EditorCompletionCallback;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zul.Button;
@@ -93,6 +99,33 @@ public class RentingEditor
         }
     }
     
+    private void updateCost() throws Exception
+    {
+        double totalCost = 0;
+        
+        for ( RentingItem ri : items )
+        {
+            Item i = ItemManager.getInstance().getItem( ri.getRef_item() );
+            
+            Title t = TitleManager.getInstance().getTitle( i.getRef_title() );
+            
+            double age = TimeUnit.DAYS.convert( System.currentTimeMillis() - t.getDtReleased().getTime(), TimeUnit.MILLISECONDS );
+            
+            Double cost = getCost( i.getMidia() == Item.MIDIA_BLURAY ? "bluray" : "dvd" ,(int)( age / 31 ) );
+            
+            totalCost += cost;
+        }
+        
+        costbox.setValue( totalCost );
+    }
+    
+    private Double getCost( String midia, int months )
+    {
+        String value = ConfigurationManager.getInstance().getProperty( midia + ".age." + months );
+        
+        return value != null ? Double.valueOf( value ) : getCost( midia, months-- );
+    }
+    
     private void addItem()
     {
         EditorWindow.openEditor( RentingEditor.this, new RentingItemEditor(), new EditorCompletionCallback<RentingItem>( new RentingItem() )
@@ -105,6 +138,8 @@ public class RentingEditor
                     items.add( getSource() );
                     
                     rentingTable.setModel( new SimpleListModel( items ) );
+                    
+                    updateCost();
                 }
 
                 catch ( Exception e )
@@ -120,13 +155,15 @@ public class RentingEditor
         });
     }
     
-    private void deleteItem()
+    private void deleteItem() throws Exception
     {
         if ( rentingTable.getSelectedIndex() != -1 )
         {
             items.remove( rentingTable.getSelectedIndex() );
             
             rentingTable.setModel( new SimpleListModel( items ) );
+            
+            updateCost();
         }
         
         else
@@ -180,6 +217,7 @@ public class RentingEditor
         
         table.createRow( "Cliente:", userbox );
         table.createRow( "Valor Total:", costbox );
+        table.createRow( "Valor Pago:", paymentbox );
         
         appendChild( table );
         appendChild( hbox );
@@ -224,6 +262,7 @@ public class RentingEditor
     
     private Listbox userbox = new Listbox();
     private Doublebox costbox = new Doublebox();
+    private Doublebox paymentbox = new Doublebox();
     
     private RentingItemsTable rentingTable = new RentingItemsTable();
 }

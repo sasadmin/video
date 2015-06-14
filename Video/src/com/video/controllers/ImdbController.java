@@ -19,7 +19,7 @@ public class ImdbController
     {
         try
         {
-            String url = "http://www.omdbapi.com/?t=" + originalTitle;
+            String url = "http://www.omdbapi.com/?t=" + originalTitle.trim().replaceAll( " ", "%20" );
 
             URL obj = new URL( url );
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();

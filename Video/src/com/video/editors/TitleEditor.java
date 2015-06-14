@@ -108,8 +108,11 @@ public class TitleEditor
             if ( source.getId() > 0 )
             {
                 titleTextbox.setText( source.getName() );
+                originalTitletextbox.setText( source.getOriginal_title() );
                 combobox.setSelectedIndex( categories.indexOf( CategoryManager.getInstance().getCategory( source.getCategory() ) ) );
                 datebox.setValue( source.getDtReleased() );
+                
+                chageOriginalTitle();
             }
         }
 
@@ -123,6 +126,7 @@ public class TitleEditor
     public void getSource( Title source )
     {
         source.setName( titleTextbox.getValue() );
+        source.setOriginal_title( originalTitletextbox.getValue() );
         source.setCategory( ( (Category) combobox.getModel().getElementAt( combobox.getSelectedIndex() ) ).getId() );
         source.setDtReleased( new Date( datebox.getValue().getTime() ) );
     }
@@ -132,13 +136,12 @@ public class TitleEditor
         try
         {
             image.getChildren().clear();
+            tableInfo.getChildren().clear();
 
             if ( !originalTitletextbox.getText().isEmpty() )
             {
                 ImdbData data = ImdbController.getImdbData( originalTitletextbox.getText() );
 
-                tableInfo.getChildren().clear();
-                
                 if ( data != null )
                 {
                     Object poster = data.getPoster();
@@ -146,8 +149,17 @@ public class TitleEditor
                     if ( poster != null && !poster.equals( "N/A" ) )
                     {
                         Image img = new Image( poster.toString() );
-                        img.setHeight( "100px" );
-                        img.setWidth( "100px" );
+                        img.setHeight( "98px" );
+                        img.setWidth( "98px" );
+
+                        image.appendChild( img );
+                    }
+                    
+                    else
+                    {
+                        Image img = new Image( "/img/image_not_found.png" );
+                        img.setHeight( "98px" );
+                        img.setWidth( "98px" );
 
                         image.appendChild( img );
                     }
@@ -177,12 +189,15 @@ public class TitleEditor
 
         button.setLabel( "Novo" );
 
-        image.setWidth( "96px" );
-        image.setHeight( "96px" );
+        image.setWidth( "100px" );
+        image.setHeight( "100px" );
+        
+        image.setStyle( "border: 1px solid gray" );
 
         combobox.setMold( "select" );
 
         titleTextbox.setHflex( "true" );
+        originalTitletextbox.setHflex( "true" );
         combobox.setHflex( "true" );
 
         Hbox hbox = new Hbox();
@@ -195,9 +210,9 @@ public class TitleEditor
 
         Div container = new Div();
         container.setVflex( "true" );
-        container.setHflex( "true" );
+        container.setWidth( "100%" );
         container.appendChild( tableInfo );
-        container.setStyle( "overflow: auto;" );
+        container.setStyle( "overflow: auto; border: solid 1px gray;" );
         container.setHeight( "300px" );
 
         table.setWidths( "80px", "", "70px" );
@@ -208,13 +223,13 @@ public class TitleEditor
         table.createRow( "Título original:", originalTitletextbox );
         table.createRow( "Gênero:", combobox, button );
         table.createRow( "Lançamento:", datebox );
-        table.createRow( "Informações:", container );
 
         table.setColspan( 0, 1, 2 );
         table.setColspan( 2, 1, 2 );
-        table.setColspan( 4, 1, 3 );
 
         appendChild( hbox );
+        appendChild( new Label( "Informações:" ) );
+        appendChild( container );
 
         button.addEventListener( org.zkoss.zk.ui.event.Events.ON_CLICK, new EventListener<Event>()
         {

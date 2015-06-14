@@ -5,11 +5,20 @@
  */
 package com.video.editors;
 
+import com.video.controllers.ImdbController;
+import com.video.data.ImdbData;
 import com.video.data.Item;
 import com.video.data.Title;
 import com.video.db.TitleManager;
 import com.video.parts.Table;
 import java.util.List;
+import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zul.Div;
+import org.zkoss.zul.Hbox;
+import org.zkoss.zul.Image;
+import org.zkoss.zul.Label;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.SimpleListModel;
@@ -66,12 +75,66 @@ public class ItemEditor
             if ( source.getId() != 0 )
             {
                 titlebox.setSelectedIndex( titles.indexOf( TitleManager.getInstance().getTitle( source.getRef_title() ) ) );
+                chageOriginalTitle();
             }
         }
         
         catch ( Exception e )
         {
             e.printStackTrace();
+        }
+    }
+    
+    private void chageOriginalTitle()
+    {
+        try
+        {
+            image.getChildren().clear();
+            tableInfo.getChildren().clear();
+
+            Title selectedTitle = (Title)titlebox.getModel().getElementAt( titlebox.getSelectedIndex() );
+            
+            if ( selectedTitle != null && !selectedTitle.getOriginal_title().isEmpty() )
+            {
+                ImdbData data = ImdbController.getImdbData( selectedTitle.getOriginal_title() );
+
+                if ( data != null )
+                {
+                    Object poster = data.getPoster();
+
+                    if ( poster != null && !poster.equals( "N/A" ) )
+                    {
+                        Image img = new Image( poster.toString() );
+                        img.setHeight( "98px" );
+                        img.setWidth( "98px" );
+
+                        image.appendChild( img );
+                    }
+                    
+                    else
+                    {
+                        Image img = new Image( "/img/image_not_found.png" );
+                        img.setHeight( "98px" );
+                        img.setWidth( "98px" );
+
+                        image.appendChild( img );
+                    }
+
+                    for ( Object key : data.getMapInfo().keySet() )
+                    {
+                        Object value = data.getMapInfo().get( key );
+
+                        Label vl = new Label( value != null ? value.toString() : "" );
+
+                        tableInfo.createRow( key.toString(), vl );
+                    }
+
+                }
+            }
+        }
+        catch ( WrongValueException e )
+        {
+            e.printStackTrace( System.err );
         }
     }
     
@@ -83,18 +146,56 @@ public class ItemEditor
         titlebox.setMold( "select" );
         midiabox.setMold( "select" );
         
+        image.setWidth( "100px" );
+        image.setHeight( "100px" );
+        
+        image.setStyle( "border: 1px solid gray" );
+        
         titlebox.setHflex( "true" );
         midiabox.setHflex( "true" );
         
         midiabox.setModel( new SimpleListModel( Item.MIDIAS ) );
         
+        Hbox hbox = new Hbox();
+
+        hbox.setHflex( "true" );
+        hbox.setSpacing( "10px" );
+
+        hbox.appendChild( image );
+        hbox.appendChild( table );
+        
+        Div container = new Div();
+        container.setVflex( "true" );
+        container.setWidth( "100%" );
+        container.appendChild( tableInfo );
+        container.setStyle( "overflow: auto; border: solid 1px gray;" );
+        container.setHeight( "300px" );
+        
+        table.setWidths( "80px", "", "70px" );
+
+        table.setDynamicProperty( "width", "450px" );
+
         table.createRow( "Título:", titlebox );
         table.createRow( "Mídia:", midiabox );
+
+        appendChild( hbox );
+        appendChild( new Label( "Informações:" ) );
+        appendChild( container );
         
-        appendChild( table );
+        titlebox.addEventListener( org.zkoss.zk.ui.event.Events.ON_SELECT, new EventListener<Event>()
+        {
+            @Override
+            public void onEvent( Event t ) throws Exception
+            {
+                chageOriginalTitle();
+            }
+        } );
     }
     
     private Table table = new Table();
+    private Table tableInfo = new Table();
+    
+    private Div image = new Div();
     
     private Listbox titlebox = new Listbox();
     private Listbox midiabox = new Listbox();

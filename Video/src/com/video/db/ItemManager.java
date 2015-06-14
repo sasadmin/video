@@ -123,7 +123,7 @@ public class ItemManager
         
         String sql = "select i.id, i.ref_title, i.midia, i.state " +
                      " from video_items i, video_titles t " +
-                     " where t.id = i.ref_title and t.name like '%" + text + "%'";
+                     " where t.id = i.ref_title and lower(t.name) like '%" + text.toLowerCase() + "%'";
         
         if ( state != -1 )
         {
