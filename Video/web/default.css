@@ -137,3 +137,8 @@ a
     border: solid 1px gainsboro;
     padding-left: 6px;
 }
+
+.z-notification-content
+{
+    font-size: 18px;
+}

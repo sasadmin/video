@@ -59,7 +59,7 @@ public class RentingEditor
 
             else if ( RentingManager.getInstance().hasPendingRentings( userbox.getSelectedItem().getId() ) )
             {
-                Messagebox.showMessage("Cliente com débitos!" );
+                Messagebox.showMessage( "Cliente com débitos!" );
                 
                 return false;
             }

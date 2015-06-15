@@ -37,6 +37,15 @@ public class TitlesPane
     {
         List<ApplicationAction> actions = new ArrayList<ApplicationAction>();
         
+        ApplicationAction refreshAction = new ApplicationAction( "/img/default_action.png", "Atualizar", "Atualizar Itens" )
+        {
+            @Override
+            public void onEvent( Event t ) throws Exception
+            {
+                refreshContent();
+            }
+        };
+        
         ApplicationAction addAction = new ApplicationAction( "/img/default_action.png", "Adicionar", "Adicionar Título" )
         {
             @Override
@@ -134,6 +143,7 @@ public class TitlesPane
             }
         };
         
+        actions.add( refreshAction );
         actions.add( addAction );
         actions.add( editAction );
         actions.add( deleteAction );

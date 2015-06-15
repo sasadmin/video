@@ -37,6 +37,12 @@ public class RentingItemEditor
             return false;
         }
         
+        else if ( dueBox.getValue() == null )
+        {
+            Messagebox.showMessage( "É preciso informar a data de entrega!" );
+            return false;
+        }
+        
         return true;
     }
 

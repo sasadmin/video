@@ -9,14 +9,14 @@ import com.video.editors.RentingEditor;
 import com.video.parts.Messagebox;
 import com.video.parts.ItemSelector;
 import com.video.parts.Table;
+import com.video.reports.csv.RentingsReport;
 import com.video.util.ApplicationAction;
 import com.video.util.ApplicationUtilities;
 import com.video.util.EditorCompletionCallback;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zul.Listbox;
@@ -51,6 +51,15 @@ public class RentingsPane
     public List<ApplicationAction> getActions()
     {
         List<ApplicationAction> actions = new ArrayList<ApplicationAction>();
+        
+        ApplicationAction refreshAction = new ApplicationAction( "/img/default_action.png", "Atualizar", "Atualizar Itens" )
+        {
+            @Override
+            public void onEvent( Event t ) throws Exception
+            {
+                refreshContent();
+            }
+        };
         
         ApplicationAction addAction = new ApplicationAction( "/img/default_action.png", "Adicionar", "Adicionar Locação" )
         {
@@ -147,9 +156,20 @@ public class RentingsPane
             }
         };
         
+        ApplicationAction reportAction = new ApplicationAction( "/img/default_action.png", "Relatório", "Relatório" )
+        {
+            @Override
+            public void onEvent( Event t ) throws Exception
+            {
+                Executions.getCurrent().sendRedirect( "/download/" + RentingsReport.generateReport( clientSelector.getSelectedItem() ).getName(), "_blank" );
+            }
+        };
+        
+        actions.add( refreshAction );
         actions.add( addAction );
         actions.add( editAction );
         actions.add( deleteAction );
+        actions.add( reportAction );
         
         return actions;
     }

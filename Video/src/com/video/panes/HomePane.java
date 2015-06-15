@@ -1,10 +1,13 @@
 package com.video.panes;
 
 import com.video.data.Renting;
+import com.video.data.User;
 import com.video.db.RentingManager;
 import com.video.db.UserManager;
 import com.video.editors.EditorWindow;
 import com.video.editors.RentingEditor;
+import com.video.parts.ItemSelector;
+import com.video.parts.Messagebox;
 import com.video.parts.Table;
 import com.video.util.ApplicationAction;
 import com.video.util.EditorCompletionCallback;
@@ -19,9 +22,7 @@ import org.zkoss.zul.Listhead;
 import org.zkoss.zul.Listheader;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.ListitemRenderer;
-import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.SimpleListModel;
-import org.zkoss.zul.Textbox;
 
 public class HomePane
     extends DefaultPane
@@ -31,6 +32,16 @@ public class HomePane
     public HomePane()
     {
         initComponents();
+        
+        try
+        {
+            clientSelector.setItems( UserManager.getInstance().getNormalUsers() );
+        }
+        
+        catch ( Exception ex )
+        {
+            ex.printStackTrace();
+        }
     }
 
     @Override
@@ -38,7 +49,7 @@ public class HomePane
     {
         List<ApplicationAction> actions = new ArrayList<ApplicationAction>();
         
-        ApplicationAction searchAction = new ApplicationAction( "/img/default_action.png", "Atualizar", "Atualizar Itens" )
+        ApplicationAction refreshAction = new ApplicationAction( "/img/default_action.png", "Atualizar", "Atualizar Itens" )
         {
             @Override
             public void onEvent( Event t ) throws Exception
@@ -83,10 +94,36 @@ public class HomePane
             @Override
             public void onEvent( Event t ) throws Exception
             {
+                if ( getSelectedItem() != null )
+                {
+                    EditorWindow.openEditor( HomePane.this, new RentingEditor(), new EditorCompletionCallback<Renting>( getSelectedItem() )
+                    {
+                        @Override
+                        public void performOk()
+                        {
+                            try
+                            {
+                                RentingManager.getInstance().updateRenting( getSource() );
+
+                                refreshContent();
+                            }
+
+                            catch ( Exception e )
+                            {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void performCancel()
+                        {
+                        }
+                    });
+                }
             }
         };
         
-        actions.add( searchAction );
+        actions.add( refreshAction );
         actions.add( addAction );
         actions.add( editAction );
         
@@ -102,7 +139,7 @@ public class HomePane
         
         else
         {
-            Messagebox.show( "É preciso selecionar um item na lista!" );
+            Messagebox.showMessage( "É preciso selecionar um item na lista!" );
         }
         
         return null;
@@ -113,7 +150,15 @@ public class HomePane
     {
         try
         {
-            table.setModel( new SimpleListModel( rentings = RentingManager.getInstance().getRentings() ) );
+            if ( clientSelector.getSelectedItem() != null )
+            {
+                table.setModel( new SimpleListModel( rentings = RentingManager.getInstance().getRentings( clientSelector.getSelectedItem().getId() ) ) );
+            }
+            
+            else
+            {
+                table.setModel( new SimpleListModel( rentings = RentingManager.getInstance().getRentings() ) );
+            }
         }
         
         catch ( Exception e )
@@ -134,14 +179,14 @@ public class HomePane
         
         filterTable.setWidths( "80px" );
         
-        titlebox.setHflex( "true" );
+        clientSelector.setHflex( "true" );
         
-        filterTable.createRow( "Título:", titlebox );
+        filterTable.createRow( "Cliente:", clientSelector );
         
         appendChild( filterTable );
         appendChild( table );
         
-        titlebox.addEventListener( org.zkoss.zk.ui.event.Events.ON_OK, new EventListener<Event>()
+        clientSelector.addEventListener( ItemSelector.Events.ON_SELECT_ITEM, new EventListener<Event>()
         {
             @Override
             public void onEvent( Event t ) throws Exception
@@ -153,7 +198,7 @@ public class HomePane
     
     private Table filterTable = new Table();
     
-    private Textbox titlebox = new Textbox();
+    private ItemSelector<User> clientSelector = new ItemSelector();
     
     private RentingsTable table = new RentingsTable();
     
