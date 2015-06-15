@@ -41,12 +41,17 @@ public class Table
         Tr tr = new Tr();
         tr.setDynamicProperty( "width", "100%" );
         
-        Td td = new Td();
+        Td td;
         
-        td.setDynamicProperty( "width", widths != null && widths.length > 0 ? widths[0] : "80px" );
-        td.appendChild( new Label( label ) );
-        
-        tr.appendChild( td );
+        if ( label != null )
+        {
+            td = new Td();
+
+            td.setDynamicProperty( "width", widths != null && widths.length > 0 ? widths[0] : "80px" );
+            td.appendChild( new Label( label ) );
+
+            tr.appendChild( td );
+        }
         
         int col = 1;
         

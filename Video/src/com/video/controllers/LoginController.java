@@ -1,35 +1,77 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.video.controllers;
 
 import com.video.data.User;
 import com.video.db.UserManager;
+import com.video.parts.Table;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.SelectorComposer;
-import org.zkoss.zk.ui.select.annotation.Listen;
-import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Div;
+import org.zkoss.zul.Image;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Textbox;
 
 public class LoginController extends SelectorComposer<Component>
 {
+    private final Textbox userName = new Textbox();
+    private final Textbox passWord = new Textbox();
+    private final Button loginButton = new Button();
+    
+    @Override
+    public void doAfterCompose(Component comp) throws Exception 
+    {
+        loginButton.setLabel( "Login" );
+        loginButton.setZclass( " " );
+        loginButton.setSclass( "login-button" );
+        
+        userName.setZclass( " " );
+        userName.setSclass( "input-login" );
+        userName.setPlaceholder( "Informe o usuário" );
+        
+        passWord.setZclass( " " );
+        passWord.setSclass( "input-login" );
+        passWord.setPlaceholder( "Informe a senha" );
+        
+        Image userImg = new Image( "/img/user.png" );
+        userImg.setStyle( "padding-right: 10px;" );
+        Image passImg = new Image( "/img/lock.png" );
+        passImg.setStyle( "padding-right: 10px;" );
+        
+        Div loginPane = new Div();
+        loginPane.appendChild( userImg );
+        loginPane.appendChild( userName );
+        
+        Div passPane = new Div();
+        passPane.appendChild( passImg );
+        passPane.appendChild( passWord );
+        
+        Table table = new Table();
+        
+        table.createRow( null, loginPane );
+        table.createRow( null, passPane );
+        table.createRow( null, new Div() );
+        table.createRow( null, loginButton );
+        
+        table.setColspan( 2, 0, 3 );
+        
+        comp.appendChild( table );
+        
+        loginButton.addEventListener( Events.ON_CLICK, new EventListener<Event>() 
+        {
+            @Override
+            public void onEvent(Event event) throws Exception 
+            {
+                doLogin();
+            }
+        });
+    }
 
-    @Wire
-    private Component component;
-    @Wire
-    private Textbox userName;
-    @Wire
-    private Textbox passWord;
-    @Wire
-    private Button login;
-
-    @Listen( "onClick=#login" )
     public void doLogin()
     {
         if ( validate() )

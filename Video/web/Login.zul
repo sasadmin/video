@@ -1,8 +1,9 @@
 <zk>
+    <style src="/default.css"/>
     <style>
         body
         {
-            background: linear-gradient(to bottom, rgb(229,231,242) 0%, rgb(2,77,117) 50%, rgb(229,231,242) 100%);
+            background-color: rgba(20, 169, 234, 1);
         }
 
         .z-page
@@ -12,31 +13,8 @@
             transform: translateY(-50%);
         }
     </style>
-    <window title="Login" id="component" border="normal" width="400px"
-        style="margin:auto;"
+    <window id="component" border="none" width="400px"
+        style="margin:auto; background-color: rgba(20, 169, 234, 1);"
         apply="com.video.controllers.LoginController" height="180px">
-        <grid hflex="true">
-            <auxhead>
-                <auxheader label="Login" colspan="2" hflex="1"></auxheader>
-            </auxhead>
-            <columns />
-            <rows>
-                <row>
-                    Usuário:
-                    <textbox id="userName" type="text" placeholder="Informe o usuário">
-                    </textbox>
-                </row>
-                <row>
-                    Senha:
-                    <textbox id="passWord" type="password" placeholder="Informe a senha"></textbox>
-                </row>
-                <row spans="2" style="text-align:center">
- 
-                    <button id="login" label="Login"></button>
- 
-                </row>
-            </rows>
- 
-        </grid>
     </window>
 </zk>

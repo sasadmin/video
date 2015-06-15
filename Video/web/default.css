@@ -117,3 +117,23 @@ a
     border: none !important;
     background: none !important;
 }
+
+.login-button
+{
+    background-color: #1180B2 !important;
+    height: 40px;
+    width: 383px;
+    color: white;
+    font-size: 18px;
+    border: none;
+    border-radius: 0px;
+}
+
+.input-login
+{
+    line-height: 26px;
+    font-size: 14px;
+    width: 340px;
+    border: solid 1px gainsboro;
+    padding-left: 6px;
+}
