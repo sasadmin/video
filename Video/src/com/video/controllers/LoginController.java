@@ -52,9 +52,12 @@ public class LoginController extends SelectorComposer<Component>
         
         Table table = new Table();
         
+        Div empty = new Div();
+        empty.setHeight( "38px" );
+        
         table.createRow( null, loginPane );
         table.createRow( null, passPane );
-        table.createRow( null, new Div() );
+        table.createRow( null, empty );
         table.createRow( null, loginButton );
         
         table.setColspan( 2, 0, 3 );
