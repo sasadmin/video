@@ -14,6 +14,7 @@ import com.video.data.User;
 import com.video.db.ItemManager;
 import com.video.db.TitleManager;
 import com.video.db.UserManager;
+import com.video.parts.ItemSelector;
 import com.video.parts.RentingItemsTable;
 import com.video.parts.Table;
 import com.video.util.ApplicationUtilities;
@@ -27,7 +28,6 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Doublebox;
 import org.zkoss.zul.Hbox;
-import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.SimpleListModel;
 import org.zkoss.zul.Vbox;
@@ -56,7 +56,7 @@ public class RentingEditor
             return false;
         }
         
-        else if ( userbox.getSelectedIndex() == -1 )
+        else if ( userbox.getSelectedItem() == null )
         {
             Messagebox.show( "É preciso informar o cliente!" );
             
@@ -70,7 +70,7 @@ public class RentingEditor
     public void getSource( Renting source )
     {
         source.setCost( costbox.getValue() );
-        source.setRef_user( ((User)userbox.getModel().getElementAt( userbox.getSelectedIndex() ) ).getId() );
+        source.setRef_user( userbox.getSelectedItem().getId() );
         source.setRentingItems( items );
         source.setRef_operator( ApplicationUtilities.getActiveUser().getId() );
     }
@@ -78,16 +78,15 @@ public class RentingEditor
     @Override
     public void setSource( Renting source )
     {
-        List<User> users = null;
-        
         try
         {
-            userbox.setModel( new SimpleListModel( users = UserManager.getInstance().getNormalUsers() ) );
+            userbox.setItems( UserManager.getInstance().getNormalUsers() );
+            returnButton.setVisible( source.getId() > 0 );
         
             if ( source.getId() > 0 )
             {
                 costbox.setValue( source.getCost() );
-                userbox.setSelectedIndex( users.indexOf( UserManager.getInstance().getUser( source.getRef_user() ) ) );
+                userbox.setSelectedItem( UserManager.getInstance().getUser( source.getRef_user() ) );
                 
                 rentingTable.setModel( new SimpleListModel( items = new ArrayList( source.getRentingItems() ) ) );
             }
@@ -209,9 +208,9 @@ public class RentingEditor
         rentingTable.setHeight( "320px" );
         rentingTable.setWidth( "480px" );
         
-        userbox.setMold( "select" );
         userbox.setHflex( "true" );
         costbox.setHflex( "true" );
+        paymentbox.setHflex( "true" );
         
         table.setWidths( "80px" );
         
@@ -260,7 +259,7 @@ public class RentingEditor
     private Button deleteButton = new Button();
     private Button returnButton = new Button();
     
-    private Listbox userbox = new Listbox();
+    private ItemSelector<User> userbox = new ItemSelector();
     private Doublebox costbox = new Doublebox();
     private Doublebox paymentbox = new Doublebox();
     

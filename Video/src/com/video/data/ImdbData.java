@@ -16,6 +16,11 @@ public class ImdbData
         return info.get( "Poster" );
     }
 
+    public Object getTitle()
+    {
+        return info.get( "Title" );
+    }
+
     public Object getImdbRating()
     {
         return info.get( "imdbRating" );

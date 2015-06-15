@@ -10,10 +10,10 @@ import com.video.data.Category;
 import com.video.data.ImdbData;
 import com.video.data.Title;
 import com.video.db.CategoryManager;
+import com.video.parts.ItemSelector;
 import com.video.parts.Table;
 import com.video.util.EditorCompletionCallback;
 import java.sql.Date;
-import java.util.List;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -24,9 +24,7 @@ import org.zkoss.zul.Div;
 import org.zkoss.zul.Hbox;
 import org.zkoss.zul.Image;
 import org.zkoss.zul.Label;
-import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Messagebox;
-import org.zkoss.zul.SimpleListModel;
 import org.zkoss.zul.Textbox;
 
 /**
@@ -53,7 +51,9 @@ public class TitleEditor
                 {
                     CategoryManager.getInstance().addCategory( getSource() );
 
-                    combobox.setModel( new SimpleListModel( CategoryManager.getInstance().getCategories() ) );
+                    combobox.setItems( CategoryManager.getInstance().getCategories() );
+                    
+                    combobox.setSelectedItem( getSource() );
                 }
 
                 catch ( Exception e )
@@ -79,7 +79,7 @@ public class TitleEditor
             return false;
         }
 
-        else if ( combobox.getSelectedIndex() == -1 )
+        else if ( combobox.getSelectedItem() == null )
         {
             Messagebox.show( "É preciso informar o gênero!" );
 
@@ -99,17 +99,15 @@ public class TitleEditor
     @Override
     public void setSource( Title source )
     {
-        List<Category> categories = null;
-
         try
         {
-            combobox.setModel( new SimpleListModel( categories = CategoryManager.getInstance().getCategories() ) );
+            combobox.setItems( CategoryManager.getInstance().getCategories() );
 
             if ( source.getId() > 0 )
             {
                 titleTextbox.setText( source.getName() );
                 originalTitletextbox.setText( source.getOriginal_title() );
-                combobox.setSelectedIndex( categories.indexOf( CategoryManager.getInstance().getCategory( source.getCategory() ) ) );
+                combobox.setSelectedItem( CategoryManager.getInstance().getCategory( source.getCategory() ) );
                 datebox.setValue( source.getDtReleased() );
                 
                 chageOriginalTitle();
@@ -127,7 +125,7 @@ public class TitleEditor
     {
         source.setName( titleTextbox.getValue() );
         source.setOriginal_title( originalTitletextbox.getValue() );
-        source.setCategory( ( (Category) combobox.getModel().getElementAt( combobox.getSelectedIndex() ) ).getId() );
+        source.setCategory( combobox.getSelectedItem().getId() );
         source.setDtReleased( new Date( datebox.getValue().getTime() ) );
     }
 
@@ -153,6 +151,11 @@ public class TitleEditor
                         img.setWidth( "98px" );
 
                         image.appendChild( img );
+                        
+                        if ( !originalTitletextbox.getText().equals(  data.getTitle().toString() ) )
+                        {
+                            originalTitletextbox.setValue( data.getTitle().toString() );
+                        }
                     }
                     
                     else
@@ -193,8 +196,6 @@ public class TitleEditor
         image.setHeight( "100px" );
         
         image.setStyle( "border: 1px solid gray" );
-
-        combobox.setMold( "select" );
 
         titleTextbox.setHflex( "true" );
         originalTitletextbox.setHflex( "true" );
@@ -258,6 +259,6 @@ public class TitleEditor
 
     private Textbox titleTextbox = new Textbox();
     private Textbox originalTitletextbox = new Textbox();
-    private Listbox combobox = new Listbox();
+    private ItemSelector<Category> combobox = new ItemSelector();
     private Datebox datebox = new Datebox();
 }

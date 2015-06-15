@@ -10,8 +10,8 @@ import com.video.data.ImdbData;
 import com.video.data.Item;
 import com.video.data.Title;
 import com.video.db.TitleManager;
+import com.video.parts.ItemSelector;
 import com.video.parts.Table;
-import java.util.List;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -38,7 +38,7 @@ public class ItemEditor
     @Override
     public boolean validateInput()
     {
-        if ( titlebox.getSelectedIndex() == -1 )
+        if ( titlebox.getSelectedItem() == null )
         {
             Messagebox.show( "É preciso informar o título!" );
             
@@ -58,23 +58,21 @@ public class ItemEditor
     @Override
     public void getSource( Item source )
     {
-        source.setRef_title( ((Title)titlebox.getModel().getElementAt( titlebox.getSelectedIndex() ) ).getId() );
+        source.setRef_title( titlebox.getSelectedItem().getId() );
         source.setMidia( midiabox.getSelectedIndex() );
     }
 
     @Override
     public void setSource( Item source )
     {
-        List<Title> titles = null;
-        
         try
         {
-            titlebox.setModel( new SimpleListModel( titles = TitleManager.getInstance().getTitles() ) );
+            titlebox.setItems( TitleManager.getInstance().getTitles() );
             midiabox.setSelectedIndex( source.getMidia() );
             
             if ( source.getId() != 0 )
             {
-                titlebox.setSelectedIndex( titles.indexOf( TitleManager.getInstance().getTitle( source.getRef_title() ) ) );
+                titlebox.setSelectedItem( TitleManager.getInstance().getTitle( source.getRef_title() ) );
                 chageOriginalTitle();
             }
         }
@@ -92,7 +90,7 @@ public class ItemEditor
             image.getChildren().clear();
             tableInfo.getChildren().clear();
 
-            Title selectedTitle = (Title)titlebox.getModel().getElementAt( titlebox.getSelectedIndex() );
+            Title selectedTitle = titlebox.getSelectedItem();
             
             if ( selectedTitle != null && !selectedTitle.getOriginal_title().isEmpty() )
             {
@@ -143,7 +141,6 @@ public class ItemEditor
         setHflex( "true" );
         setVflex( "true" );
         
-        titlebox.setMold( "select" );
         midiabox.setMold( "select" );
         
         image.setWidth( "100px" );
@@ -182,7 +179,7 @@ public class ItemEditor
         appendChild( new Label( "Informações:" ) );
         appendChild( container );
         
-        titlebox.addEventListener( org.zkoss.zk.ui.event.Events.ON_SELECT, new EventListener<Event>()
+        titlebox.addEventListener( ItemSelector.Events.ON_SELECT_ITEM, new EventListener<Event>()
         {
             @Override
             public void onEvent( Event t ) throws Exception
@@ -197,6 +194,6 @@ public class ItemEditor
     
     private Div image = new Div();
     
-    private Listbox titlebox = new Listbox();
+    private ItemSelector<Title> titlebox = new ItemSelector();
     private Listbox midiabox = new Listbox();
 }
