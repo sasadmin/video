@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.video.editors;
 
 import com.video.controllers.ImdbController;
@@ -11,6 +6,7 @@ import com.video.data.Item;
 import com.video.data.RentingItem;
 import com.video.data.Title;
 import com.video.db.ItemManager;
+import com.video.parts.Messagebox;
 import com.video.db.TitleManager;
 import com.video.parts.ItemSelector;
 import com.video.parts.Table;
@@ -23,12 +19,7 @@ import org.zkoss.zul.Div;
 import org.zkoss.zul.Hbox;
 import org.zkoss.zul.Image;
 import org.zkoss.zul.Label;
-import org.zkoss.zul.Messagebox;
 
-/**
- *
- * @author Galimberti
- */
 public class RentingItemEditor
     extends DefaultEditor<RentingItem>
 {
@@ -42,7 +33,7 @@ public class RentingItemEditor
     {
         if ( itemList.getSelectedItem() == null )
         {
-            Messagebox.show( "É preciso selecionar um Título!" );
+            Messagebox.showMessage( "É preciso selecionar um Título!" );
             return false;
         }
         

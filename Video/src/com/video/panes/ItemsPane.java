@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.video.panes;
 
 import com.video.data.Item;
@@ -11,6 +6,7 @@ import com.video.db.ItemManager;
 import com.video.db.TitleManager;
 import com.video.editors.EditorWindow;
 import com.video.editors.ItemEditor;
+import com.video.parts.Messagebox;
 import com.video.parts.Table;
 import com.video.util.ApplicationAction;
 import com.video.util.ApplicationUtilities;
@@ -18,21 +14,15 @@ import com.video.util.EditorCompletionCallback;
 import java.util.ArrayList;
 import java.util.List;
 import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zul.Intbox;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listhead;
 import org.zkoss.zul.Listheader;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.ListitemRenderer;
-import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.SimpleListModel;
 import org.zkoss.zul.Textbox;
 
-/**
- *
- * @author Galimberti
- */
 public class ItemsPane
     extends DefaultPane
 {
@@ -113,7 +103,7 @@ public class ItemsPane
                 
                 else
                 {
-                    Messagebox.show( "Sem permissão para deletar item!" );
+                    Messagebox.showMessage("Sem permissão para deletar item!" );
                 }
             }
         };
@@ -134,7 +124,7 @@ public class ItemsPane
         
         else
         {
-            Messagebox.show( "É preciso selecionar um item na lista!" );
+            Messagebox.showMessage( "É preciso selecionar um item na lista!" );
         }
         
         return null;

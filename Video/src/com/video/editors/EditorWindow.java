@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.video.editors;
 
 import com.video.util.EditorCompletionCallback;
@@ -17,10 +12,6 @@ import org.zkoss.zul.Hbox;
 import org.zkoss.zul.South;
 import org.zkoss.zul.Window;
 
-/**
- *
- * @author Galimberti
- */
 public class EditorWindow
     extends Window
 {

@@ -1,19 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.video.editors;
 
 import com.video.data.Category;
+import com.video.parts.Messagebox;
 import com.video.parts.Table;
-import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Textbox;
 
-/**
- *
- * @author Galimberti
- */
 public class CategoryEditor
     extends DefaultEditor<Category>
 {
@@ -27,7 +18,7 @@ public class CategoryEditor
     {
         if ( textbox.getText() == null || textbox.getText().isEmpty() )
         {
-            Messagebox.show( "É preciso informar o nome!" );
+            Messagebox.showMessage( "É preciso informar o nome!" );
             
             return false;
         }
@@ -38,6 +29,7 @@ public class CategoryEditor
     @Override
     public void setSource( Category source )
     {
+        textbox.setValue( source.getName() );
     }
     
     @Override

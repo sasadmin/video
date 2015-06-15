@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.video.editors;
 
 import com.video.controllers.ConfigurationManager;
@@ -15,6 +10,7 @@ import com.video.db.ItemManager;
 import com.video.db.RentingManager;
 import com.video.db.TitleManager;
 import com.video.db.UserManager;
+import com.video.parts.Messagebox;
 import com.video.parts.ItemSelector;
 import com.video.parts.RentingItemsTable;
 import com.video.parts.Table;
@@ -29,14 +25,9 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Doublebox;
 import org.zkoss.zul.Hbox;
-import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.SimpleListModel;
 import org.zkoss.zul.Vbox;
 
-/**
- *
- * @author Galimberti
- */
 public class RentingEditor
     extends DefaultEditor<Renting>
 {
@@ -54,21 +45,21 @@ public class RentingEditor
         {
             if ( items.isEmpty() )
             {
-                Messagebox.show( "É preciso ter ao menos um item na lista!" );
+                Messagebox.showMessage("É preciso ter ao menos um item na lista!" );
 
                 return false;
             }
 
             else if ( userbox.getSelectedItem() == null )
             {
-                Messagebox.show( "É preciso informar o cliente!" );
+                Messagebox.showMessage("É preciso informar o cliente!" );
 
                 return false;
             }
 
             else if ( RentingManager.getInstance().hasPendingRentings( userbox.getSelectedItem().getId() ) )
             {
-                Messagebox.show( "Cliente com débitos!" );
+                Messagebox.showMessage("Cliente com débitos!" );
                 
                 return false;
             }
@@ -76,7 +67,7 @@ public class RentingEditor
         
         catch ( Exception e )
         {
-            Messagebox.show( e.getMessage() );
+            Messagebox.showMessage(e.getMessage() );
             
             return false;
         }
@@ -185,7 +176,7 @@ public class RentingEditor
         
         else
         {
-            Messagebox.show( "É preciso selecionar um item na lista!" );
+            Messagebox.showMessage( "É preciso selecionar um item na lista!" );
         }
     }
     
@@ -200,7 +191,7 @@ public class RentingEditor
         
         else
         {
-            Messagebox.show( "É preciso selecionar um item na lista!" );
+            Messagebox.showMessage( "É preciso selecionar um item na lista!" );
         }
     }
     

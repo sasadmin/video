@@ -1,8 +1,8 @@
-
 package com.video.controllers;
 
 import com.video.data.User;
 import com.video.db.UserManager;
+import com.video.parts.Messagebox;
 import com.video.parts.Table;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
@@ -14,7 +14,6 @@ import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Image;
-import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Textbox;
 
 public class LoginController extends SelectorComposer<Component>
@@ -98,13 +97,13 @@ public class LoginController extends SelectorComposer<Component>
     {
         if ( isNull( userName.getValue() ) )
         {
-            Messagebox.show( "Informe o usuário!" );
+            Messagebox.showMessage( "Informe o usuário!" );
             userName.setFocus( true );
         }
 
         else if ( isNull( passWord.getValue() ) )
         {
-            Messagebox.show( "Informe a senha!" );
+            Messagebox.showMessage( "Informe a senha!" );
             passWord.setFocus( true );
         }
 
@@ -124,7 +123,7 @@ public class LoginController extends SelectorComposer<Component>
             
             if ( u == null || !u.getPassword().equals( passWord.getValue() ) )
             {
-                Messagebox.show( "Usuário e/ou senha incorretos!" );
+                Messagebox.showMessage( "Usuário e/ou senha incorretos!" );
                 userName.setValue( "" );
                 passWord.setValue( "" );
                 userName.setFocus( true );
@@ -134,7 +133,7 @@ public class LoginController extends SelectorComposer<Component>
             {
                 if ( u.getType() == User.TYPE_USER )
                 {
-                    Messagebox.show( "Usuário sem permissão para acessar esta aplicação!" );
+                    Messagebox.showMessage( "Usuário sem permissão para acessar esta aplicação!" );
                     userName.setValue( "" );
                     passWord.setValue( "" );
                     userName.setFocus( true );

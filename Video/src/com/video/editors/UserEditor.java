@@ -1,23 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.video.editors;
 
 import com.video.data.User;
+import com.video.parts.Messagebox;
 import com.video.parts.Table;
 import com.video.util.ApplicationUtilities;
 import java.util.Arrays;
 import org.zkoss.zul.Listbox;
-import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.SimpleListModel;
 import org.zkoss.zul.Textbox;
 
-/**
- *
- * @author Galimberti
- */
 public class UserEditor
     extends DefaultEditor<User>
 {
@@ -51,28 +42,28 @@ public class UserEditor
     {
         if ( nameField.getValue().isEmpty() )
         {
-            Messagebox.show( "É preciso informar o nome!" );
+            Messagebox.showMessage( "É preciso informar o nome!" );
             
             return false;
         }
         
         else if ( loginField.getValue().isEmpty() )
         {
-            Messagebox.show( "É preciso informar o login!" );
+            Messagebox.showMessage( "É preciso informar o login!" );
             
             return false;
         }
         
         else if ( passwordField.getValue().isEmpty() )
         {
-            Messagebox.show( "É preciso informar a senha!" );
+            Messagebox.showMessage( "É preciso informar a senha!" );
             
             return false;
         }
         
         else if ( rgField.getValue().isEmpty() )
         {
-            Messagebox.show( "É preciso informar o RG!" );
+            Messagebox.showMessage("É preciso informar o RG!" );
             
             return false;
         }

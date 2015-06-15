@@ -1,14 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.video.panes;
 
 import com.video.data.User;
 import com.video.db.UserManager;
 import com.video.editors.EditorWindow;
 import com.video.editors.UserEditor;
+import com.video.parts.Messagebox;
 import com.video.util.ApplicationAction;
 import com.video.util.ApplicationUtilities;
 import com.video.util.EditorCompletionCallback;
@@ -22,13 +18,8 @@ import org.zkoss.zul.Listhead;
 import org.zkoss.zul.Listheader;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.ListitemRenderer;
-import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.SimpleListModel;
 
-/**
- *
- * @author Galimberti
- */
 public class UsersPane
     extends DefaultPane
 {
@@ -86,7 +77,7 @@ public class UsersPane
                     {
                         if ( getSelectedUser().getType() != User.TYPE_USER )
                         {
-                            Messagebox.show( "Sem permissão para editar o item!" );
+                            Messagebox.showMessage( "Sem permissão para editar o item!" );
                             
                             return;
                         }
@@ -144,7 +135,7 @@ public class UsersPane
                 
                 else
                 {
-                    Messagebox.show( "Sem permissão para deletar item!" );
+                    Messagebox.showMessage( "Sem permissão para deletar item!" );
                 }
             }
         };
@@ -179,7 +170,7 @@ public class UsersPane
         
         else
         {
-            Messagebox.show( "É preciso selecionar um item na lista!" );
+            Messagebox.showMessage( "É preciso selecionar um item na lista!" );
         }
         
         return null;

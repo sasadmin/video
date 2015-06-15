@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.video.panes;
 
 import com.video.parts.AdministratorMenu;
@@ -20,10 +15,6 @@ import org.zkoss.zul.Label;
 import org.zkoss.zul.North;
 import org.zkoss.zul.Vbox;
 
-/**
- *
- * @author Galimberti
- */
 public class AdministratorApplicationPane
     extends Div
 {

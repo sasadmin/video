@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.video.panes;
 
 import com.video.data.Renting;
@@ -11,6 +6,7 @@ import com.video.db.RentingManager;
 import com.video.db.UserManager;
 import com.video.editors.EditorWindow;
 import com.video.editors.RentingEditor;
+import com.video.parts.Messagebox;
 import com.video.parts.ItemSelector;
 import com.video.parts.Table;
 import com.video.util.ApplicationAction;
@@ -29,13 +25,8 @@ import org.zkoss.zul.Listhead;
 import org.zkoss.zul.Listheader;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.ListitemRenderer;
-import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.SimpleListModel;
 
-/**
- *
- * @author Galimberti
- */
 public class RentingsPane
     extends DefaultPane
 {
@@ -151,7 +142,7 @@ public class RentingsPane
                 
                 else
                 {
-                    Messagebox.show( "Sem permissão para deletar item!" );
+                    Messagebox.showMessage( "Sem permissão para deletar item!" );
                 }
             }
         };
@@ -172,7 +163,7 @@ public class RentingsPane
         
         else
         {
-            Messagebox.show( "É preciso selecionar um item na lista!" );
+            Messagebox.showMessage( "É preciso selecionar um item na lista!" );
         }
         
         return null;
