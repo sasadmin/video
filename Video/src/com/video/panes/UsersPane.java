@@ -239,7 +239,7 @@ public class UsersPane
             {
                 new Listcell( u.getName() ).setParent( lstm );
                 new Listcell( User.TYPES[u.getType()] ).setParent( lstm );
-                new Listcell( new SimpleDateFormat().format( u.getDt_created() ) ).setParent( lstm );
+                new Listcell( new SimpleDateFormat( "dd/MM/yyyy" ).format( u.getDt_created() ) ).setParent( lstm );
                 
                 lstm.setValue( u );
             }

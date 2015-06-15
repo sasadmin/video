@@ -70,8 +70,8 @@ public class RentingItemsTable
             
             new Listcell( "" + item.getId() ).setParent( lstm );
             new Listcell( t.getName() ).setParent( lstm );
-            new Listcell( rentingItem.getDt_due() == null ? "n/d" : new SimpleDateFormat().format( rentingItem.getDt_due() ) ).setParent( lstm );
-            new Listcell( rentingItem.getDt_return() == null ? "n/d" : new SimpleDateFormat().format( rentingItem.getDt_return() ) ).setParent( lstm );
+            new Listcell( rentingItem.getDt_due() == null ? "n/d" : new SimpleDateFormat( "dd/MM/yyyy" ).format( rentingItem.getDt_due() ) ).setParent( lstm );
+            new Listcell( rentingItem.getDt_return() == null ? "n/d" : new SimpleDateFormat( "dd/MM/yyyy" ).format( rentingItem.getDt_return() ) ).setParent( lstm );
 
             lstm.setValue( item );
         }

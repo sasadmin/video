@@ -5,16 +5,15 @@
  */
 package com.video.panes;
 
-import com.video.data.Item;
 import com.video.data.Renting;
-import com.video.db.ItemManager;
 import com.video.db.RentingManager;
-import com.video.db.TitleManager;
+import com.video.db.UserManager;
 import com.video.editors.EditorWindow;
 import com.video.editors.RentingEditor;
 import com.video.parts.Table;
 import com.video.util.ApplicationAction;
 import com.video.util.EditorCompletionCallback;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import org.zkoss.zk.ui.event.Event;
@@ -36,7 +35,7 @@ import org.zkoss.zul.Textbox;
 public class HomePane
     extends DefaultPane
 {
-    private List<Item> items = new ArrayList<Item>();
+    private List<Renting> rentings = new ArrayList<Renting>();
     
     public HomePane()
     {
@@ -48,7 +47,7 @@ public class HomePane
     {
         List<ApplicationAction> actions = new ArrayList<ApplicationAction>();
         
-        ApplicationAction searchAction = new ApplicationAction( "/img/default_action.png", "Filtrar", "Filtrar Itens" )
+        ApplicationAction searchAction = new ApplicationAction( "/img/default_action.png", "Atualizar", "Atualizar Itens" )
         {
             @Override
             public void onEvent( Event t ) throws Exception
@@ -103,11 +102,11 @@ public class HomePane
         return actions;
     }
     
-    public Item getSelectedItem()
+    public Renting getSelectedItem()
     {
         if ( table.getSelectedIndex() != -1 )
         {
-            return items.get( table.getSelectedIndex() );
+            return rentings.get( table.getSelectedIndex() );
         }
         
         else
@@ -123,7 +122,7 @@ public class HomePane
     {
         try
         {
-            table.setModel( new SimpleListModel( items = ItemManager.getInstance().getItems( titlebox.getValue(), -1 ) ) );
+            table.setModel( new SimpleListModel( rentings = RentingManager.getInstance().getRentings() ) );
         }
         
         catch ( Exception e )
@@ -165,57 +164,50 @@ public class HomePane
     
     private Textbox titlebox = new Textbox();
     
-    private ItemsTable table = new ItemsTable();
+    private RentingsTable table = new RentingsTable();
     
-    private class ItemsTable
+    private class RentingsTable
         extends Listbox
     {
         private String[] columns = 
         {
-            "Código",
-            "Título",
-            "Mídia",
-            "Situação"
+            "Usuário",
+            "Situação",
+            "Data"
         };
         
-        public ItemsTable()
+        public RentingsTable()
         {
             setItemRenderer( new Renderer() );
             
             Listhead listhead = new Listhead();
             
-            Listheader codeHeader = new Listheader( columns[0] );
-            codeHeader.setWidth( "80px" );
-            listhead.appendChild( codeHeader );
+            Listheader userHeader = new Listheader( columns[0] );
+            userHeader.setWidth( "180px" );
+            listhead.appendChild( userHeader );
             
-            Listheader titleHeader = new Listheader( columns[1] );
-            titleHeader.setHflex( "true" );
-            listhead.appendChild( titleHeader );
-            
-            Listheader midiaHeader = new Listheader( columns[2] );
-            midiaHeader.setWidth( "120px" );
-            listhead.appendChild( midiaHeader );
-            
-            Listheader stateHeader = new Listheader( columns[3] );
+            Listheader stateHeader = new Listheader( columns[1] );
             stateHeader.setWidth( "180px" );
             listhead.appendChild( stateHeader );
+            
+            Listheader dateHeader = new Listheader( columns[2] );
+            dateHeader.setWidth( "180px" );
+            listhead.appendChild( dateHeader );
             
             appendChild( listhead );
         }
         
         private class Renderer
-            implements ListitemRenderer<Item>
+            implements ListitemRenderer<Renting>
         {
             @Override
-            public void render( Listitem lstm, Item item, int i ) throws Exception
+            public void render( Listitem lstm, Renting r, int i ) throws Exception
             {
-                new Listcell( "" + item.getId() ).setParent( lstm );
-                new Listcell( TitleManager.getInstance().getTitle( item.getRef_title() ).getName() ).setParent( lstm );
-                new Listcell( Item.MIDIAS[item.getMidia()] ).setParent( lstm );
-                Listcell stateCell = new Listcell( Item.STATES[item.getState()] );
-                stateCell.setParent( lstm );
+                new Listcell( UserManager.getInstance().getUser( r.getRef_user() ).getName() ).setParent( lstm );
+                new Listcell( Renting.STATES[r.getState()] ).setParent( lstm );
+                new Listcell( new SimpleDateFormat( "dd/MM/yyyy" ).format( r.getDt_rent() ) ).setParent( lstm );
                 
-                lstm.setValue( item );
+                lstm.setValue( r );
             }
         }
     }

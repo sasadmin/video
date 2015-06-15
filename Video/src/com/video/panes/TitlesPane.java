@@ -233,7 +233,7 @@ public class TitlesPane
             {
                 new Listcell( t.getName() ).setParent( lstm );
                 new Listcell( CategoryManager.getInstance().getCategory( t.getCategory() ).getName() ).setParent( lstm );
-                new Listcell( new SimpleDateFormat().format( t.getDtReleased() ) ).setParent( lstm );
+                new Listcell( new SimpleDateFormat( "dd/MM/yyyy" ).format( t.getDtReleased() ) ).setParent( lstm );
                 
                 lstm.setValue( t );
             }

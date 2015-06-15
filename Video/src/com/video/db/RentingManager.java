@@ -163,7 +163,39 @@ public class RentingManager
         Database db = Database.getInstance();
         
         String sql = "select id, ref_user, state, cost, dt_rent, current_payment, ref_operator " +
-                     " from video_rentings";
+                     " from video_rentings order by state";
+        
+        ResultSet rs = db.executeQuery( sql );
+        
+        while ( rs.next() )
+        {
+            Renting r = new Renting();
+            
+            r.setId( rs.getInt( "id" ) );
+            r.setRef_user( rs.getInt( "ref_user" ) );
+            r.setState( rs.getInt( "state" ) );
+            r.setCost( rs.getInt( "cost" ) );
+            r.setDt_rent( rs.getDate( "dt_rent" ) );
+            r.setCurrent_payment( rs.getInt( "current_payment" ) );
+            r.setRef_operator( rs.getInt( "ref_operator" ) );
+            r.setRentingItems( getRentingItems( r ) );
+            
+            rentings.add( r );
+        }
+        
+        return rentings;
+    }
+    
+    public List<Renting> getRentings( int user ) throws Exception
+    {
+        List<Renting> rentings = new ArrayList();
+        
+        Database db = Database.getInstance();
+        
+        String sql = "select id, ref_user, state, cost, dt_rent, current_payment, ref_operator " +
+                     " from video_rentings " +
+                     " where ref_user = " + user +
+                     " order by state";
         
         ResultSet rs = db.executeQuery( sql );
         
@@ -210,6 +242,25 @@ public class RentingManager
         }
         
         return rentingItems;
+    }
+    
+    public boolean hasPendingRentings( int user ) throws Exception
+    {
+        Database db = Database.getInstance();
+        
+        String sql = "select count(*) " +
+                     " from video_renting_items ri, video_rentings r where ri.ref_renting = r.id " +
+                     " and r.ref_user = " + user +
+                     " and ri.dt_return is null and ri.dt_due < " + db.quote( new Date( System.currentTimeMillis() ) );
+        
+        ResultSet rs = db.executeQuery( sql );
+        
+        if ( rs.next() )
+        {
+            return rs.getInt( 1 ) > 0;
+        }
+        
+        return false;
     }
     
     public void addRentingItems( List<RentingItem> rentingItems, Renting r ) throws Exception

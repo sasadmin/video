@@ -11,13 +11,18 @@ import com.video.db.RentingManager;
 import com.video.db.UserManager;
 import com.video.editors.EditorWindow;
 import com.video.editors.RentingEditor;
+import com.video.parts.ItemSelector;
+import com.video.parts.Table;
 import com.video.util.ApplicationAction;
 import com.video.util.ApplicationUtilities;
 import com.video.util.EditorCompletionCallback;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listhead;
@@ -39,6 +44,16 @@ public class RentingsPane
     public RentingsPane()
     {
         initComponents();
+        
+        try
+        {
+            clientSelector.setItems( UserManager.getInstance().getNormalUsers() );
+        }
+        
+        catch ( Exception ex )
+        {
+            ex.printStackTrace();
+        }
     }
 
     @Override
@@ -168,7 +183,15 @@ public class RentingsPane
     {
         try
         {
-            table.setModel( new SimpleListModel( rentings = RentingManager.getInstance().getRentings() ) );
+            if ( clientSelector.getSelectedItem() != null )
+            {
+                table.setModel( new SimpleListModel( rentings = RentingManager.getInstance().getRentings( clientSelector.getSelectedItem().getId() ) ) );
+            }
+            
+            else
+            {
+                table.setModel( new SimpleListModel( rentings = RentingManager.getInstance().getRentings() ) );
+            }
         }
         
         catch ( Exception e )
@@ -184,11 +207,31 @@ public class RentingsPane
         
         setApplicationName( "Locações" );
         
-        table.setHflex( "true" );
+        table.setWidth( "100%" );
         table.setVflex( true );
         
+        filterTable.setWidths( "80px" );
+        
+        clientSelector.setHflex( "true" );
+        
+        filterTable.createRow( "Cliente:", clientSelector );
+        
+        appendChild( filterTable );
         appendChild( table );
+        
+        clientSelector.addEventListener( ItemSelector.Events.ON_SELECT_ITEM, new EventListener<Event>()
+        {
+            @Override
+            public void onEvent( Event t ) throws Exception
+            {
+                refreshContent();
+            }
+        } );
     }
+    
+    private Table filterTable = new Table();
+    
+    private ItemSelector<User> clientSelector = new ItemSelector();
     
     private RentingsTable table = new RentingsTable();
     
@@ -231,7 +274,7 @@ public class RentingsPane
             {
                 new Listcell( UserManager.getInstance().getUser( r.getRef_user() ).getName() ).setParent( lstm );
                 new Listcell( Renting.STATES[r.getState()] ).setParent( lstm );
-                new Listcell( new SimpleDateFormat().format( r.getDt_rent() ) ).setParent( lstm );
+                new Listcell( new SimpleDateFormat( "dd/MM/yyyy" ).format( r.getDt_rent() ) ).setParent( lstm );
                 
                 lstm.setValue( r );
             }

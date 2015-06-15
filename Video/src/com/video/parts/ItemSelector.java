@@ -77,6 +77,11 @@ public class ItemSelector<T>
         } );
     }
     
+    private void clearItem()
+    {
+        setSelectedItem( null );
+    }
+    
     private void initComponents()
     {
         Hbox hbox = new Hbox();
@@ -86,10 +91,12 @@ public class ItemSelector<T>
         
         hbox.appendChild( textbox );
         hbox.appendChild( tbPick );
+        hbox.appendChild( tbClear );
         
         textbox.setHflex( "true" );
         textbox.setReadonly( true );
         tbPick.setImage( "/img/tb_folder.png" );
+        tbClear.setImage( "/img/tb_clear.png" );
         
         appendChild( hbox );
         
@@ -101,8 +108,18 @@ public class ItemSelector<T>
                 pickItem();
             }
         } );
+        
+        tbClear.addEventListener( org.zkoss.zk.ui.event.Events.ON_CLICK, new EventListener<Event>()
+        {
+            @Override
+            public void onEvent( Event t ) throws Exception
+            {
+                clearItem();
+            }
+        } );
     }
     
     private Textbox textbox = new Textbox();
     private Toolbarbutton tbPick = new Toolbarbutton();
+    private Toolbarbutton tbClear = new Toolbarbutton();
 }

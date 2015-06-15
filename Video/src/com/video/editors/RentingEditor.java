@@ -12,6 +12,7 @@ import com.video.data.RentingItem;
 import com.video.data.Title;
 import com.video.data.User;
 import com.video.db.ItemManager;
+import com.video.db.RentingManager;
 import com.video.db.TitleManager;
 import com.video.db.UserManager;
 import com.video.parts.ItemSelector;
@@ -49,16 +50,33 @@ public class RentingEditor
     @Override
     public boolean validateInput()
     {
-        if ( items.isEmpty() )
+        try
         {
-            Messagebox.show( "É preciso ter ao menos um item na lista!" );
-            
-            return false;
+            if ( items.isEmpty() )
+            {
+                Messagebox.show( "É preciso ter ao menos um item na lista!" );
+
+                return false;
+            }
+
+            else if ( userbox.getSelectedItem() == null )
+            {
+                Messagebox.show( "É preciso informar o cliente!" );
+
+                return false;
+            }
+
+            else if ( RentingManager.getInstance().hasPendingRentings( userbox.getSelectedItem().getId() ) )
+            {
+                Messagebox.show( "Cliente com débitos!" );
+                
+                return false;
+            }
         }
         
-        else if ( userbox.getSelectedItem() == null )
+        catch ( Exception e )
         {
-            Messagebox.show( "É preciso informar o cliente!" );
+            Messagebox.show( e.getMessage() );
             
             return false;
         }
