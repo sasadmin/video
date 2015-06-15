@@ -72,6 +72,15 @@ public class LoginController extends SelectorComposer<Component>
                 doLogin();
             }
         });
+        
+        passWord.addEventListener( Events.ON_OK, new EventListener<Event>() 
+        {
+            @Override
+            public void onEvent(Event event) throws Exception 
+            {
+                doLogin();
+            }
+        });
     }
 
     public void doLogin()
