@@ -49,7 +49,7 @@ public class HomePane
     {
         List<ApplicationAction> actions = new ArrayList<ApplicationAction>();
         
-        ApplicationAction refreshAction = new ApplicationAction( "/img/default_action.png", "Atualizar", "Atualizar Itens" )
+        ApplicationAction refreshAction = new ApplicationAction( "/img/tb_refresh.png", "Atualizar", "Atualizar Itens" )
         {
             @Override
             public void onEvent( Event t ) throws Exception
@@ -58,7 +58,7 @@ public class HomePane
             }
         };
         
-        ApplicationAction addAction = new ApplicationAction( "/img/default_action.png", "Locação", "Locar Itens" )
+        ApplicationAction addAction = new ApplicationAction( "/img/tb_rent.jpg", "Locação", "Locar Itens" )
         {
             @Override
             public void onEvent( Event t ) throws Exception
@@ -89,7 +89,7 @@ public class HomePane
             }
         };
         
-        ApplicationAction editAction = new ApplicationAction( "/img/default_action.png", "Devolução", "Devolver Itens" )
+        ApplicationAction editAction = new ApplicationAction( "/img/tb_return.png", "Devolução", "Devolver Itens" )
         {
             @Override
             public void onEvent( Event t ) throws Exception

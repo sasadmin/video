@@ -16,9 +16,11 @@ import com.video.util.EditorCompletionCallback;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import org.zkoss.json.JSONObject;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listhead;
@@ -52,7 +54,7 @@ public class RentingsPane
     {
         List<ApplicationAction> actions = new ArrayList<ApplicationAction>();
         
-        ApplicationAction refreshAction = new ApplicationAction( "/img/default_action.png", "Atualizar", "Atualizar Itens" )
+        ApplicationAction refreshAction = new ApplicationAction( "/img/tb_refresh.png", "Atualizar", "Atualizar Itens" )
         {
             @Override
             public void onEvent( Event t ) throws Exception
@@ -61,7 +63,7 @@ public class RentingsPane
             }
         };
         
-        ApplicationAction addAction = new ApplicationAction( "/img/default_action.png", "Adicionar", "Adicionar Locação" )
+        ApplicationAction addAction = new ApplicationAction( "/img/tb_add.png", "Adicionar", "Adicionar Locação" )
         {
             @Override
             public void onEvent( Event t ) throws Exception
@@ -92,7 +94,7 @@ public class RentingsPane
             }
         };
         
-        ApplicationAction editAction = new ApplicationAction( "/img/default_action.png", "Editar", "Editar Locação" )
+        ApplicationAction editAction = new ApplicationAction( "/img/tb_edit.png", "Editar", "Editar Locação" )
         {
             @Override
             public void onEvent( Event t ) throws Exception
@@ -126,7 +128,7 @@ public class RentingsPane
             }
         };
         
-        ApplicationAction deleteAction = new ApplicationAction( "/img/default_action.png", "Excluir", "Excluir Locação" )
+        ApplicationAction deleteAction = new ApplicationAction( "/img/tb_delete.png", "Excluir", "Excluir Locação" )
         {
             @Override
             public void onEvent( Event t ) throws Exception
@@ -156,7 +158,7 @@ public class RentingsPane
             }
         };
         
-        ApplicationAction reportAction = new ApplicationAction( "/img/default_action.png", "Relatório", "Relatório" )
+        ApplicationAction exportAction = new ApplicationAction( "/img/tb_csv.png", "Exportar", "Exportar para csv" )
         {
             @Override
             public void onEvent( Event t ) throws Exception
@@ -165,10 +167,20 @@ public class RentingsPane
             }
         };
         
+        ApplicationAction reportAction = new ApplicationAction( "/img/tb_report.png", "Relatório", "Imprimir Relatório" )
+        {
+            @Override
+            public void onEvent( Event t ) throws Exception
+            {
+                Clients.evalJavaScript( "redirectReport('" + com.video.reports.pdf.RentingsReport.getJSONReport() + "')" );
+            }
+        };
+        
         actions.add( refreshAction );
         actions.add( addAction );
         actions.add( editAction );
         actions.add( deleteAction );
+        actions.add( exportAction );
         actions.add( reportAction );
         
         return actions;

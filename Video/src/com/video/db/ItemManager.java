@@ -115,6 +115,38 @@ public class ItemManager
         return items;
     }
     
+    public List<Item> getItemsForTitle( int title, int midia ) throws Exception
+    {
+        List<Item> items = new ArrayList();
+        
+        Database db = Database.getInstance();
+        
+        String sql = "select id, ref_title, midia, state " +
+                     " from video_items" +
+                     " where ref_title = " + title;
+        
+        if ( midia != -1 )
+        {
+            sql += " and midia = " + midia;
+        }
+        
+        ResultSet rs = db.executeQuery( sql );
+        
+        while ( rs.next() )
+        {
+            Item i = new Item();
+            
+            i.setId( rs.getInt( "id" ) );
+            i.setRef_title( rs.getInt( "ref_title" ) );
+            i.setMidia( rs.getInt( "midia" ) );
+            i.setState( rs.getInt( "state" ) );
+            
+            items.add( i );
+        }
+        
+        return items;
+    }
+    
     public List<Item> getItems( String text, int state ) throws Exception
     {
         List<Item> items = new ArrayList();

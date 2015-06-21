@@ -38,7 +38,7 @@ public class ItemsPane
     {
         List<ApplicationAction> actions = new ArrayList<ApplicationAction>();
         
-        ApplicationAction refreshAction = new ApplicationAction( "/img/default_action.png", "Atualizar", "Atualizar Itens" )
+        ApplicationAction refreshAction = new ApplicationAction( "/img/tb_refresh.png", "Atualizar", "Atualizar Itens" )
         {
             @Override
             public void onEvent( Event t ) throws Exception
@@ -47,7 +47,7 @@ public class ItemsPane
             }
         };
         
-        ApplicationAction addAction = new ApplicationAction( "/img/default_action.png", "Adicionar", "Adicionar Item" )
+        ApplicationAction addAction = new ApplicationAction( "/img/tb_add.png", "Adicionar", "Adicionar Item" )
         {
             @Override
             public void onEvent( Event t ) throws Exception
@@ -78,7 +78,7 @@ public class ItemsPane
             }
         };
         
-        ApplicationAction deleteAction = new ApplicationAction( "/img/default_action.png", "Excluir", "Excluir Item" )
+        ApplicationAction deleteAction = new ApplicationAction( "/img/tb_delete.png", "Excluir", "Excluir Item" )
         {
             @Override
             public void onEvent( Event t ) throws Exception

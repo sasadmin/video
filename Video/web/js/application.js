@@ -14,3 +14,21 @@ function buttonEffect( uuid )
         }
     );
 }
+
+function redirectReport( json )
+{
+    var myForm = document.createElement( "form" );
+    myForm.method= "post";
+    myForm.action = contextPath + "/report";
+    myForm.target = "_blank";
+    
+    var myInput = document.createElement( "input" );
+    myInput.setAttribute( "name", "data" );
+    myInput.setAttribute( "value", json );
+    
+    myForm.appendChild( myInput );
+    
+    document.body.appendChild( myForm );
+    myForm.submit();
+    document.body.removeChild( myForm );
+}

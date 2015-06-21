@@ -23,8 +23,8 @@ public class AuthenticationInit implements Initiator
     public void doInit( Page page, Map<String, Object> args ) throws Exception
     {
         //debug
-        User u = UserManager.getInstance().getUserByLogin( "admin" );
-        Sessions.getCurrent( true ).setAttribute( "activeLogin", u );
+//        User u = UserManager.getInstance().getUserByLogin( "admin" );
+//        Sessions.getCurrent( true ).setAttribute( "activeLogin", u );
         //---------
         
         

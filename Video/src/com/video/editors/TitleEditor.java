@@ -43,8 +43,6 @@ public class TitleEditor
                     CategoryManager.getInstance().addCategory( getSource() );
 
                     combobox.setItems( CategoryManager.getInstance().getCategories() );
-                    
-                    combobox.setSelectedItem( getSource() );
                 }
 
                 catch ( Exception e )

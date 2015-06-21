@@ -78,7 +78,8 @@ public class RentingEditor
     @Override
     public void getSource( Renting source )
     {
-        source.setCost( costbox.getValue() );
+        source.setCost( costbox.getValue() != null ? costbox.getValue() : 0.0 );
+        source.setCurrent_payment( paymentbox.getValue() != null ? paymentbox.getValue() : 0.0 );
         source.setRef_user( userbox.getSelectedItem().getId() );
         source.setRentingItems( items );
         source.setRef_operator( ApplicationUtilities.getActiveUser().getId() );
@@ -95,6 +96,7 @@ public class RentingEditor
             if ( source.getId() > 0 )
             {
                 costbox.setValue( source.getCost() );
+                paymentbox.setValue( source.getCurrent_payment() );
                 userbox.setSelectedItem( UserManager.getInstance().getUser( source.getRef_user() ) );
                 
                 rentingTable.setModel( new SimpleListModel( items = new ArrayList( source.getRentingItems() ) ) );
@@ -131,7 +133,7 @@ public class RentingEditor
     {
         String value = ConfigurationManager.getInstance().getProperty( midia + ".age." + months );
         
-        return value != null ? Double.valueOf( value ) : getCost( midia, months-- );
+        return value != null ? Double.valueOf( value ) : getCost( midia, --months );
     }
     
     private void addItem()

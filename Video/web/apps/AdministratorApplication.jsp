@@ -6,4 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+<script>
+    contextPath = "${pageContext.request.contextPath}"
+</script>
 <jsp:include page="AdministratorApplication.zul"/>

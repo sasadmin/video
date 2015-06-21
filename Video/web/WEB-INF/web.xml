@@ -32,6 +32,14 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
             <servlet-name>downloadServlet</servlet-name>
             <url-pattern>/download/*</url-pattern>
         </servlet-mapping>
+        <servlet>
+            <servlet-name>reportServlet</servlet-name>
+            <servlet-class>com.video.util.PDFReportServlet</servlet-class>
+        </servlet>
+        <servlet-mapping>
+            <servlet-name>reportServlet</servlet-name>
+            <url-pattern>/report/*</url-pattern>
+        </servlet-mapping>
 	<servlet>
 		<description>ZK loader for ZUML pages</description>
 		<servlet-name>zkLoader</servlet-name>

@@ -11,6 +11,6 @@ public class Messagebox
 
     public static void showMessage( String msg )
     {
-        Clients.showNotification( msg, null, null, null, 1, true );
+        Clients.showNotification( msg, null, null, null, 2000, true );
     }
 }

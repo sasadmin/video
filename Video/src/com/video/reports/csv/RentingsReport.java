@@ -33,6 +33,11 @@ public class RentingsReport
 
             writer.append("Operador");
             writer.append(';');
+            if ( u == null )
+            {
+                writer.append("Cliente");
+            }
+            writer.append(';');
             writer.append("Situação");
             writer.append(';');
             writer.append("Data");
@@ -48,6 +53,11 @@ public class RentingsReport
                 writer.append('\n');
                 writer.append( UserManager.getInstance().getUser( r.getRef_operator() ).getName() );
                 writer.append(';');
+                if ( u == null )
+                {
+                    writer.append( UserManager.getInstance().getUser( r.getRef_user() ).getName() );
+                    writer.append(';');
+                }
                 writer.append( Renting.STATES[r.getState()] );
                 writer.append(';');
                 writer.append( new SimpleDateFormat( "dd/MM/yyyy" ).format( r.getDt_rent() ) );

@@ -3,17 +3,21 @@ package com.video.panes;
 import com.video.data.Title;
 import com.video.data.User;
 import com.video.db.CategoryManager;
+import com.video.db.ItemManager;
 import com.video.db.TitleManager;
 import com.video.editors.EditorWindow;
 import com.video.editors.TitleEditor;
 import com.video.parts.Messagebox;
+import com.video.reports.csv.TitlesReport;
 import com.video.util.ApplicationAction;
 import com.video.util.ApplicationUtilities;
 import com.video.util.EditorCompletionCallback;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listhead;
@@ -37,7 +41,7 @@ public class TitlesPane
     {
         List<ApplicationAction> actions = new ArrayList<ApplicationAction>();
         
-        ApplicationAction refreshAction = new ApplicationAction( "/img/default_action.png", "Atualizar", "Atualizar Itens" )
+        ApplicationAction refreshAction = new ApplicationAction( "/img/tb_refresh.png", "Atualizar", "Atualizar Itens" )
         {
             @Override
             public void onEvent( Event t ) throws Exception
@@ -46,7 +50,7 @@ public class TitlesPane
             }
         };
         
-        ApplicationAction addAction = new ApplicationAction( "/img/default_action.png", "Adicionar", "Adicionar Título" )
+        ApplicationAction addAction = new ApplicationAction( "/img/tb_add.png", "Adicionar", "Adicionar Título" )
         {
             @Override
             public void onEvent( Event t ) throws Exception
@@ -77,7 +81,7 @@ public class TitlesPane
             }
         };
         
-        ApplicationAction editAction = new ApplicationAction( "/img/default_action.png", "Editar", "Editar Título" )
+        ApplicationAction editAction = new ApplicationAction( "/img/tb_edit.png", "Editar", "Editar Título" )
         {
             @Override
             public void onEvent( Event t ) throws Exception
@@ -113,7 +117,7 @@ public class TitlesPane
             }
         };
         
-        ApplicationAction deleteAction = new ApplicationAction( "/img/default_action.png", "Excluir", "Excluir Título" )
+        ApplicationAction deleteAction = new ApplicationAction( "/img/tb_delete.png", "Excluir", "Excluir Título" )
         {
             @Override
             public void onEvent( Event t ) throws Exception
@@ -124,9 +128,18 @@ public class TitlesPane
                     {
                         if ( getSelectedTitle() != null )
                         {
-                            TitleManager.getInstance().deleteTitle( getSelectedTitle() );
+                            if ( ItemManager.getInstance().getItemsForTitle( getSelectedTitle().getId(), -1 ).isEmpty() )
+                            {
+                                TitleManager.getInstance().deleteTitle( getSelectedTitle() );
 
-                            refreshContent();
+                                refreshContent();
+                    
+                            }
+                            
+                            else
+                            {
+                                Messagebox.showMessage( "Título com vínculos não pode ser excluído!" );
+                            }
                         }
                     }
 
@@ -143,10 +156,30 @@ public class TitlesPane
             }
         };
         
+        ApplicationAction exportAction = new ApplicationAction( "/img/tb_csv.png", "Exportar", "Exportar para csv" )
+        {
+            @Override
+            public void onEvent( Event t ) throws Exception
+            {
+                Executions.getCurrent().sendRedirect( "/download/" + TitlesReport.generateReport().getName(), "_blank" );
+            }
+        };
+        
+        ApplicationAction reportAction = new ApplicationAction( "/img/tb_report.png", "Relatório", "Imprimir Relatório" )
+        {
+            @Override
+            public void onEvent( Event t ) throws Exception
+            {
+                Clients.evalJavaScript( "redirectReport('" + com.video.reports.pdf.TitlesReport.getJSONReport() + "')" );
+            }
+        };
+        
         actions.add( refreshAction );
         actions.add( addAction );
         actions.add( editAction );
         actions.add( deleteAction );
+        actions.add( exportAction );
+        actions.add( reportAction );
         
         return actions;
     }

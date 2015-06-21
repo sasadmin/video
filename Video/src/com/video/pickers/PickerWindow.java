@@ -65,8 +65,8 @@ public class PickerWindow
     
     private void initComponents()
     {
-        setWidth( "640px" );
-        setHeight( "480px" );
+        setWidth( "580px" );
+        setHeight( "420px" );
         
         setStyle( "border: solid 5px rgb(0,88,132)" );
         
