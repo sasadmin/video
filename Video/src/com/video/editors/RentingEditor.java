@@ -45,21 +45,21 @@ public class RentingEditor
         {
             if ( items.isEmpty() )
             {
-                Messagebox.showMessage("É preciso ter ao menos um item na lista!" );
+                Messagebox.showMessage("Ã‰ preciso ter ao menos um item na lista!" );
 
                 return false;
             }
 
             else if ( userbox.getSelectedItem() == null )
             {
-                Messagebox.showMessage("É preciso informar o cliente!" );
+                Messagebox.showMessage("Ã‰ preciso informar o cliente!" );
 
                 return false;
             }
 
             else if ( RentingManager.getInstance().hasPendingRentings( userbox.getSelectedItem().getId() ) )
             {
-                Messagebox.showMessage( "Cliente com débitos!" );
+                Messagebox.showMessage( "Cliente com dÃ©bitos!" );
                 
                 return false;
             }
@@ -78,6 +78,7 @@ public class RentingEditor
     @Override
     public void getSource( Renting source )
     {
+        //tette
         source.setCost( costbox.getValue() != null ? costbox.getValue() : 0.0 );
         source.setCurrent_payment( paymentbox.getValue() != null ? paymentbox.getValue() : 0.0 );
         source.setRef_user( userbox.getSelectedItem().getId() );
@@ -145,11 +146,19 @@ public class RentingEditor
             {
                 try
                 {
-                    items.add( getSource() );
+                    if ( !items.contains( getSource() ) )
+                    {
+                        items.add( getSource() );
+                        
+                        rentingTable.setModel( new SimpleListModel( items ) );
+
+                        updateCost();
+                    }
                     
-                    rentingTable.setModel( new SimpleListModel( items ) );
-                    
-                    updateCost();
+                    else
+                    {
+                        Messagebox.showMessage( "TÃ­tulo jÃ¡ adicionado na locaÃ§Ã£o!" );
+                    }
                 }
 
                 catch ( Exception e )
@@ -178,7 +187,7 @@ public class RentingEditor
         
         else
         {
-            Messagebox.showMessage( "É preciso selecionar um item na lista!" );
+            Messagebox.showMessage( "Ã‰ preciso selecionar um item na lista!" );
         }
     }
     
@@ -193,7 +202,7 @@ public class RentingEditor
         
         else
         {
-            Messagebox.showMessage( "É preciso selecionar um item na lista!" );
+            Messagebox.showMessage( "Ã‰ preciso selecionar um item na lista!" );
         }
     }
     
